@@ -1,0 +1,6 @@
+{
+  "name": "ember-cli-simple-auth",
+  "dependencies": {
+    "ember-simple-auth": "0.6.0"
+  }
+}
