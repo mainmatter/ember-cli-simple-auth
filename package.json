@@ -5,7 +5,6 @@
   "version": "0.6.2",
   "description": "Include the Ember Simple Auth base library into an Ember CLI application.",
   "main": "index.js",
-  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
