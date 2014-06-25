@@ -1,0 +1,27 @@
+{
+  "name": "ember-simple-auth",
+  "version": "0.6.0",
+  "main": [
+    "./simple-auth.js",
+    "./simple-auth.amd.js",
+    "./simple-auth-cookie-store.js",
+    "./simple-auth-cookie-store.amd.js",
+    "./simple-auth-devise.js",
+    "./simple-auth-devise.amd.js",
+    "./simple-auth-oauth2.js",
+    "./simple-auth-oauth2.amd.js"
+  ],
+  "dependencies": {
+    "ember": ">=1.2"
+  },
+  "homepage": "https://github.com/simplabs/ember-simple-auth-component",
+  "_release": "0.6.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.6.0",
+    "commit": "288f84ddb4ec25aa681c3ec9977e109a4ac8088c"
+  },
+  "_source": "git://github.com/simplabs/ember-simple-auth-component.git",
+  "_target": "0.6.0",
+  "_originalSource": "ember-simple-auth"
+}
