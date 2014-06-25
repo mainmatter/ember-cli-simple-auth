@@ -377,6 +377,7 @@ define("simple-auth/configuration",
         this.sessionPropertyName      = globalConfig.sessionPropertyName || this.sessionPropertyName;
         this.authorizer               = globalConfig.authorizer || this.authorizer;
         this.store                    = globalConfig.store || this.store;
+        this.crossOriginWhitelist     = globalConfig.crossOriginWhitelist || this.crossOriginWhitelist;
         this.applicationRootUrl       = container.lookup('router:main').get('rootURL') || '/';
       }
     };
