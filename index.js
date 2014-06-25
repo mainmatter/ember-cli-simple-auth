@@ -37,20 +37,6 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     'simple-auth/configuration':                          ['default'],
     'simple-auth/initializer':                            ['default']
   });
-  this.app.import('vendor/ember-simple-auth/simple-auth-oauth2.amd.js', {
-    'simple-auth-oauth2/authenticators/oauth2': ['default'],
-    'simple-auth-oauth2/authorizers/oauth2':    ['default'],
-    'simple-auth-oauth2/ember':                 ['default'],
-  });
-  this.app.import('vendor/ember-simple-auth/simple-auth-devise.amd.js', {
-    'simple-auth-devise/authenticators/devise': ['default'],
-    'simple-auth-devise/authorizers/devise':    ['default'],
-    'simple-auth-devise/ember':                 ['default']
-  });
-  this.app.import('vendor/ember-simple-auth/simple-auth-cookie-store.amd.js', {
-    'simple-auth-cookie-store/stores/cookie': ['default'],
-    'simple-auth-cookie-store/ember':         ['default']
-  });
 };
 
 module.exports = EmberCLISimpleAuth;
