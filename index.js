@@ -6,6 +6,9 @@ function EmberCLISimpleAuth(project) {
   this.name    = 'Ember CLI Simple Auth';
 }
 
+EmberCLISimpleAuth.prototype.treeFor = function included(name) {
+};
+
 EmberCLISimpleAuth.prototype.included = function included(app) {
   this.app = app;
 
