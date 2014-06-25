@@ -35,7 +35,7 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     'simple-auth/stores/ephemeral':                       ['default'],
     'simple-auth/stores/local-storage':                   ['default'],
     'simple-auth/configuration':                          ['default'],
-    'simple-auth/ember':                                  ['default']
+    'simple-auth/initializer':                            ['default']
   });
   this.app.import('vendor/ember-simple-auth/simple-auth-oauth2.amd.js', {
     'simple-auth-oauth2/authenticators/oauth2': ['default'],
