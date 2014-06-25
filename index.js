@@ -34,8 +34,7 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     'simple-auth/stores/base':                            ['default'],
     'simple-auth/stores/ephemeral':                       ['default'],
     'simple-auth/stores/local-storage':                   ['default'],
-    'simple-auth/configuration':                          ['default'],
-    'simple-auth/initializer':                            ['default']
+    'simple-auth/configuration':                          ['default']
   });
 };
 
