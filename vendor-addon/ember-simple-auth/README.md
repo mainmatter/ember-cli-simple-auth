@@ -1,6 +1,6 @@
-#  Ember.SimpleAuth
+#  Ember Simple Auth
 
-This is a shim repository that keeps the Ember.SimpleAuth component for
+This is a shim repository that keeps the Ember Simple Auth component for
 [Bower](http://bower.io):
 
 ```js
@@ -11,5 +11,5 @@ This is a shim repository that keeps the Ember.SimpleAuth component for
 }
 ```
 
-For the actual Ember.SimpleAuth repository see
+For the actual Ember Simple Auth repository see
 https://github.com/simplabs/ember-simple-auth
