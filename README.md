@@ -1,7 +1,7 @@
 #  Ember Simple Auth
 
-This is an npm package that contains Ember Simple Auth packaged as an Ember CLI
-Addon.
+This is an npm package that contains Ember Simple Auth packaged as an
+[Ember CLI](https://github.com/stefanpenner/ember-cli) Addon.
 
 ## Installation
 
