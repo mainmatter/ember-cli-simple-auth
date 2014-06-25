@@ -14,7 +14,7 @@ function unwatchedTree(dir) {
 }
 
 EmberCLISimpleAuth.prototype.treeFor = function included(name) {
-  var treePath =  path.join('node_modules/ember-cli-simple-auth', name + '-addon');
+  var treePath = path.join('node_modules/ember-cli-simple-auth', name + '-addon');
 
   if (fs.existsSync(treePath)) {
     return unwatchedTree(treePath);
@@ -34,7 +34,8 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     'simple-auth/stores/base':                            ['default'],
     'simple-auth/stores/ephemeral':                       ['default'],
     'simple-auth/stores/local-storage':                   ['default'],
-    'simple-auth/configuration':                          ['default']
+    'simple-auth/configuration':                          ['default'],
+    'simple-auth/initializer':                            ['default']
   });
 };
 
