@@ -6,7 +6,7 @@ function EmberCLISimpleAuth(project) {
   this.name    = 'Ember CLI Simple Auth';
 }
 
-EmberCLIPretender.prototype.included = function included(app) {
+EmberCLISimpleAuth.prototype.included = function included(app) {
   this.app = app;
 
   this.app.import('vendor-addon/ember-simple-auth/simple-auth.amd.js', {
