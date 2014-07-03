@@ -482,6 +482,7 @@ define("simple-auth/mixins/application-route-mixin",
         @private
       */
       beforeModel: function(transition) {
+        this._super(transition);
         var _this = this;
         Ember.A([
           'sessionAuthenticationSucceeded',
@@ -675,6 +676,7 @@ define("simple-auth/mixins/authenticated-route-mixin",
         @param {Transition} transition The transition that lead to this route
       */
       beforeModel: function(transition) {
+        this._super(transition);
         if (!this.get(Configuration.sessionPropertyName).get('isAuthenticated')) {
           transition.abort();
           this.get(Configuration.sessionPropertyName).set('attemptedTransition', transition);
@@ -1542,7 +1544,6 @@ define("simple-auth/utils/is-secure-url",
     }
   });
 var initializer                   = requireModule('simple-auth/initializer').default;
-var setup                         = requireModule('simple-auth/setup').default;
 var Configuration                 = requireModule('simple-auth/configuration').default;
 var Session                       = requireModule('simple-auth/session').default;
 var BaseAuthenticator             = requireModule('simple-auth/authenticators/base').default;
@@ -1559,8 +1560,6 @@ var AuthenticationControllerMixin = requireModule('simple-auth/mixins/authentica
 var LoginControllerMixin          = requireModule('simple-auth/mixins/login-controller-mixin').default;
 
 global.SimpleAuth = {
-  setup: setup,
-
   Configuration: Configuration,
 
   Session: Session,

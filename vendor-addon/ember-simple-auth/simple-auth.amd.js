@@ -426,6 +426,7 @@ define("simple-auth/mixins/application-route-mixin",
         @private
       */
       beforeModel: function(transition) {
+        this._super(transition);
         var _this = this;
         Ember.A([
           'sessionAuthenticationSucceeded',
@@ -619,6 +620,7 @@ define("simple-auth/mixins/authenticated-route-mixin",
         @param {Transition} transition The transition that lead to this route
       */
       beforeModel: function(transition) {
+        this._super(transition);
         if (!this.get(Configuration.sessionPropertyName).get('isAuthenticated')) {
           transition.abort();
           this.get(Configuration.sessionPropertyName).set('attemptedTransition', transition);
