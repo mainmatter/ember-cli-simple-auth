@@ -10,5 +10,9 @@
   },
   "keywords": [
     "ember-addon"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/simplabs/ember-cli-simple-auth"
+  }
 }
