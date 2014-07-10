@@ -14,5 +14,6 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/simplabs/ember-cli-simple-auth"
-  }
+  },
+  "homepage": "https://github.com/simplabs/ember-cli-simple-auth"
 }
