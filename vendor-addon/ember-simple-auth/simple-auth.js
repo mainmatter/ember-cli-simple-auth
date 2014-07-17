@@ -1537,6 +1537,9 @@ define("simple-auth/test-helpers/authenticate-session",
   ["exports"],
   function(__exports__) {
     "use strict";
+    var global = (typeof window !== 'undefined') ? window : {},
+        Ember = global.Ember;
+
     __exports__["default"] = Ember.Test.registerAsyncHelper('authenticateSession', function(app) {
       var session = app.__container__.lookup('simple-auth-session:main');
       session.authenticate('simple-auth-authenticator:test');
@@ -1547,6 +1550,9 @@ define("simple-auth/test-helpers/invalidate-session",
   ["exports"],
   function(__exports__) {
     "use strict";
+    var global = (typeof window !== 'undefined') ? window : {},
+        Ember = global.Ember;
+
     __exports__["default"] = Ember.Test.registerAsyncHelper('invalidateSession', function(app) {
       var session = app.__container__.lookup('simple-auth-session:main');
       if (session.get('isAuthenticated')) {

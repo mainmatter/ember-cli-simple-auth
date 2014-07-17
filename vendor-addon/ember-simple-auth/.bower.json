@@ -14,11 +14,11 @@
     "ember": ">=1.2"
   },
   "homepage": "https://github.com/simplabs/ember-simple-auth-component",
-  "_release": "7c7c26181b",
+  "_release": "f334f7b51f",
   "_resolution": {
     "type": "branch",
     "branch": "next",
-    "commit": "7c7c26181bc42dd4816b4e78a6438a91aabf3b32"
+    "commit": "f334f7b51fa616a4cf5377036cd66e0d0a6539be"
   },
   "_source": "git://github.com/simplabs/ember-simple-auth-component.git",
   "_target": "next",
