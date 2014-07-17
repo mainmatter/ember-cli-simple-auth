@@ -200,9 +200,30 @@ define("simple-auth/authenticators/base",
         resolving promise and thus never intercepts session invalidation.
 
         @method invalidate
+        @param {Object} data The data that the session currently holds
         @return {Ember.RSVP.Promise} A promise that when it resolves results in the session being invalidated
       */
-      invalidate: function() {
+      invalidate: function(data) {
+        return new Ember.RSVP.resolve();
+      }
+    });
+  });
+define("simple-auth/authenticators/test", 
+  ["./base","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Base = __dependency1__["default"];
+
+    __exports__["default"] = Base.extend({
+      restore: function(data) {
+        return new Ember.RSVP.resolve();
+      },
+
+      authenticate: function(options) {
+        return new Ember.RSVP.resolve();
+      },
+
+      invalidate: function(data) {
         return new Ember.RSVP.resolve();
       }
     });
@@ -334,6 +355,19 @@ define("simple-auth/configuration",
       authorizer: null,
 
       /**
+        The session factory to use as it is registered with Ember's container,
+        see
+        [Ember's API docs](http://emberjs.com/api/classes/Ember.Application.html#method_register).
+
+        @property session
+        @readOnly
+        @static
+        @type String
+        @default 'simple-auth-session:main'
+      */
+      session: 'simple-auth-session:main',
+
+      /**
         The store factory to use as it is registered with Ember's container, see
         [Ember's API docs](http://emberjs.com/api/classes/Ember.Application.html#method_register).
 
@@ -376,6 +410,7 @@ define("simple-auth/configuration",
         this.routeAfterAuthentication = globalConfig.routeAfterAuthentication || this.routeAfterAuthentication;
         this.sessionPropertyName      = globalConfig.sessionPropertyName || this.sessionPropertyName;
         this.authorizer               = globalConfig.authorizer || this.authorizer;
+        this.session                  = globalConfig.session || this.session;
         this.store                    = globalConfig.store || this.store;
         this.crossOriginWhitelist     = globalConfig.crossOriginWhitelist || this.crossOriginWhitelist;
         this.applicationRootUrl       = container.lookup('router:main').get('rootURL') || '/';
@@ -915,6 +950,15 @@ define("simple-auth/session",
       */
       store: null,
       /**
+        The Ember.js container,
+
+        @property container
+        @type Container
+        @readOnly
+        @default null
+      */
+      container: null,
+      /**
         Returns whether the session is currently authenticated.
 
         @property isAuthenticated
@@ -933,14 +977,6 @@ define("simple-auth/session",
         @private
       */
       content: {},
-
-      /**
-        @method init
-        @private
-      */
-      init: function() {
-        this.bindToStoreEvents();
-      },
 
       /**
         Authenticates the session with an `authenticator` and appropriate
@@ -993,6 +1029,7 @@ define("simple-auth/session",
         @return {Ember.RSVP.Promise} A promise that resolves when the session was invalidated successfully
       */
       invalidate: function() {
+        Ember.assert('Session#invalidate requires the session to be authenticated', this.get('isAuthenticated'));
         var _this = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
           var authenticator = _this.container.lookup(_this.authenticator);
@@ -1108,17 +1145,18 @@ define("simple-auth/session",
             _this.clear(true);
           }
         });
-      }
+      }.observes('store')
     });
   });
 define("simple-auth/setup", 
-  ["./configuration","./session","./stores/local-storage","./stores/ephemeral","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+  ["./configuration","./session","./stores/local-storage","./stores/ephemeral","simple-auth/authenticators/test","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
     var Configuration = __dependency1__["default"];
     var Session = __dependency2__["default"];
     var LocalStorage = __dependency3__["default"];
     var Ephemeral = __dependency4__["default"];
+    var TestAuthenticator = __dependency5__["default"];
 
     function extractLocationOrigin(location) {
       if (Ember.typeOf(location) === 'string') {
@@ -1148,9 +1186,13 @@ define("simple-auth/setup",
       return crossOriginWhitelist.indexOf(urlOrigin) > -1;
     }
 
-    function registerStores(container) {
+    function registerFactories(container) {
       container.register('simple-auth-session-store:local-storage', LocalStorage);
       container.register('simple-auth-session-store:ephemeral', Ephemeral);
+      container.register('simple-auth-session:main', Session);
+      if (Ember.testing) {
+        container.register('simple-auth-authenticator:test', TestAuthenticator);
+      }
     }
 
     /**
@@ -1160,17 +1202,17 @@ define("simple-auth/setup",
     __exports__["default"] = function(container, application) {
       Configuration.load(container);
       application.deferReadiness();
-      registerStores(container);
+      registerFactories(container);
 
-      var store            = container.lookup(Configuration.store);
-      var session          = Session.create({ store: store, container: container });
-      crossOriginWhitelist = Ember.A(Configuration.crossOriginWhitelist).map(function(origin) {
-        return extractLocationOrigin(origin);
+      var store   = container.lookup(Configuration.store);
+      var session = container.lookup(Configuration.session);
+      session.setProperties({ store: store, container: container });
+      Ember.A(['controller', 'route']).forEach(function(component) {
+        container.injection(component, Configuration.sessionPropertyName, Configuration.session);
       });
 
-      container.register('simple-auth-session:main', session, { instantiate: false });
-      Ember.A(['controller', 'route']).forEach(function(component) {
-        container.injection(component, Configuration.sessionPropertyName, 'simple-auth-session:main');
+      crossOriginWhitelist = Ember.A(Configuration.crossOriginWhitelist).map(function(origin) {
+        return extractLocationOrigin(origin);
       });
 
       if (!Ember.isEmpty(Configuration.authorizer)) {
@@ -1491,6 +1533,28 @@ define("simple-auth/stores/local-storage",
       }
     });
   });
+define("simple-auth/test-helpers/authenticate-session", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    __exports__["default"] = Ember.Test.registerAsyncHelper('authenticateSession', function(app) {
+      var session = app.__container__.lookup('simple-auth-session:main');
+      session.authenticate('simple-auth-authenticator:test');
+      return wait();
+    });
+  });
+define("simple-auth/test-helpers/invalidate-session", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    __exports__["default"] = Ember.Test.registerAsyncHelper('invalidateSession', function(app) {
+      var session = app.__container__.lookup('simple-auth-session:main');
+      if (session.get('isAuthenticated')) {
+        session.invalidate();
+      }
+      return wait();
+    });
+  });
 define("simple-auth/utils/flat-objects-are-equal", 
   ["exports"],
   function(__exports__) {
@@ -1591,4 +1655,9 @@ global.SimpleAuth = {
 };
 
 requireModule('simple-auth/ember');
+
+if (Ember.testing) {
+  requireModule('simple-auth/test-helpers/authenticate-session');
+  requireModule('simple-auth/test-helpers/invalidate-session');
+}
 })((typeof global !== 'undefined') ? global : window);
