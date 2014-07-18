@@ -38,7 +38,7 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     'simple-auth/configuration':                          ['default'],
     'simple-auth/initializer':                            ['default'],
   };
-  if (this.app.env === 'test') {
+  if (this.app.env !== 'production') {
     exports['simple-auth/test-helpers/authenticate-session'] = ['default'];
     exports['simple-auth/test-helpers/invalidate-session']   = ['default'];
   }
