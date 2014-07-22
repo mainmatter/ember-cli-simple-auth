@@ -181,22 +181,22 @@ define("simple-auth-oauth2/authenticators/oauth2",
       restore: function(data) {
         var _this = this;
         return new Ember.RSVP.Promise(function(resolve, reject) {
-          if (!Ember.isEmpty(data.access_token)) {
-            var now = (new Date()).getTime();
-            if (!Ember.isEmpty(data.expires_at) && data.expires_at < now) {
-              if (_this.refreshAccessTokens) {
-                _this.refreshAccessToken(data.expires_in, data.refresh_token).then(function(data) {
-                  resolve(data);
-                }, reject);
-              } else {
-                reject();
-              }
+          var now = (new Date()).getTime();
+          if (!Ember.isEmpty(data.expires_at) && data.expires_at < now) {
+            if (_this.refreshAccessTokens) {
+              _this.refreshAccessToken(data.expires_in, data.refresh_token).then(function(data) {
+                resolve(data);
+              }, reject);
+            } else {
+              reject();
+            }
+          } else {
+            if (Ember.isEmpty(data.access_token)) {
+              reject();
             } else {
               _this.scheduleAccessTokenRefresh(data.expires_in, data.expires_at, data.refresh_token);
               resolve(data);
             }
-          } else {
-            reject();
           }
         });
       },
@@ -311,7 +311,7 @@ define("simple-auth-oauth2/authenticators/oauth2",
           if (Ember.isEmpty(expiresAt) && !Ember.isEmpty(expiresIn)) {
             expiresAt = new Date(now + expiresIn * 1000).getTime();
           }
-          var offset = (Math.floor(Math.random() * 15) + 5) * 1000;
+          var offset = (Math.floor(Math.random() * 5) + 5) * 1000;
           if (!Ember.isEmpty(refreshToken) && !Ember.isEmpty(expiresAt) && expiresAt > now - offset) {
             Ember.run.cancel(this._refreshTokenTimeout);
             delete this._refreshTokenTimeout;
@@ -353,7 +353,7 @@ define("simple-auth-oauth2/authenticators/oauth2",
       */
       absolutizeExpirationTime: function(expiresIn) {
         if (!Ember.isEmpty(expiresIn)) {
-          return new Date((new Date().getTime()) + (expiresIn - 5) * 1000).getTime();
+          return new Date((new Date().getTime()) + expiresIn * 1000).getTime();
         }
       }
     });
@@ -459,4 +459,6 @@ global.SimpleAuth.Authenticators.OAuth2 = Authenticator;
 global.SimpleAuth.Authorizers.OAuth2    = Authorizer;
 
 requireModule('simple-auth-oauth2/ember');
+
+Ember.libraries.register('Ember Simple Auth OAuth 2.0', '0.6.3');
 })((typeof global !== 'undefined') ? global : window);

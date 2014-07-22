@@ -462,20 +462,22 @@ define("simple-auth/mixins/application-route-mixin",
       */
       beforeModel: function(transition) {
         this._super(transition);
-        var _this = this;
-        Ember.A([
-          'sessionAuthenticationSucceeded',
-          'sessionAuthenticationFailed',
-          'sessionInvalidationSucceeded',
-          'sessionInvalidationFailed',
-          'authorizationFailed'
-        ]).forEach(function(event) {
-          _this.get(Configuration.sessionPropertyName).on(event, function(error) {
-            Array.prototype.unshift.call(arguments, event);
-            var target = transition.isActive ? transition : _this;
-            target.send.apply(target, arguments);
+        if (!this.get('_authEventListenersAssigned')) {
+          this.set('_authEventListenersAssigned', true);
+          var _this = this;
+          Ember.A([
+            'sessionAuthenticationSucceeded',
+            'sessionAuthenticationFailed',
+            'sessionInvalidationSucceeded',
+            'sessionInvalidationFailed',
+            'authorizationFailed'
+          ]).forEach(function(event) {
+            _this.get(Configuration.sessionPropertyName).on(event, function(error) {
+              Array.prototype.unshift.call(arguments, event);
+              transition.send.apply(transition, arguments);
+            });
           });
-        });
+        }
       },
 
       actions: {
@@ -771,7 +773,7 @@ define("simple-auth/mixins/login-controller-mixin",
         authenticate: function() {
           var data = this.getProperties('identification', 'password');
           this.set('password', null);
-          this._super(data);
+          return this._super(data);
         }
       }
     });
@@ -1026,8 +1028,7 @@ define("simple-auth/session",
           content:         content
         });
         this.bindToAuthenticatorEvents();
-        var data = Ember.$.extend({ authenticator: authenticator }, this.content);
-        this.store.replace(data);
+        this.updateStore();
         this.endPropertyChanges();
         if (trigger) {
           this.trigger('sessionAuthenticationSucceeded');
@@ -1050,6 +1051,30 @@ define("simple-auth/session",
         this.endPropertyChanges();
         if (trigger) {
           this.trigger('sessionInvalidationSucceeded');
+        }
+      },
+
+      /**
+        @method setUnknownProperty
+        @private
+      */
+      setUnknownProperty: function(key, value) {
+        var result = this._super(key, value);
+        this.updateStore();
+        return result;
+      },
+
+      /**
+        @method updateStore
+        @private
+      */
+      updateStore: function() {
+        var data = this.content;
+        if (!Ember.isEmpty(this.authenticator)) {
+          data = Ember.$.extend({ authenticator: this.authenticator }, data);
+        }
+        if (!Ember.isEmpty(data)) {
+          this.store.persist(data);
         }
       },
 
@@ -1229,7 +1254,8 @@ define("simple-auth/stores/base",
       */
 
       /**
-        Persists the `data` in the store.
+        Persists the `data` in the store. This actually replaces all currently
+        stored data.
 
         `Stores.Base`'s implementation does nothing.
 
@@ -1249,23 +1275,6 @@ define("simple-auth/stores/base",
       */
       restore: function() {
         return {};
-      },
-
-      /**
-        Replaces all data currently saved in the store with the specified `data`.
-
-        `Stores.Base`'s implementation clears the store, then persists the
-        specified `data`. If the store's current content is equal to the specified
-        `data`, nothing is done.
-
-        @method replace
-        @param {Object} data The data to replace the store's content with
-      */
-      replace: function(data) {
-        if (!flatObjectsAreEqual(data, this.restore())) {
-          this.clear();
-          this.persist(data);
-        }
       },
 
       /**
@@ -1319,7 +1328,7 @@ define("simple-auth/stores/ephemeral",
         @param {Object} data The data to persist
       */
       persist: function(data) {
-        this._data = Ember.$.extend(data, this._data);
+        this._data = JSON.stringify(data || {});
       },
 
       /**
@@ -1329,7 +1338,7 @@ define("simple-auth/stores/ephemeral",
         @return {Object} All data currently persisted
       */
       restore: function() {
-        return Ember.$.extend({}, this._data);
+        return JSON.parse(this._data) || {};
       },
 
       /**
@@ -1339,7 +1348,7 @@ define("simple-auth/stores/ephemeral",
       */
       clear: function() {
         delete this._data;
-        this._data = {};
+        this._data = '{}';
       }
     });
   });
@@ -1368,20 +1377,13 @@ define("simple-auth/stores/local-storage",
     */
     __exports__["default"] = Base.extend({
       /**
-        The prefix to use for the store's keys so they can be distinguished from
-        others.
+        The key the store stores the data in.
 
-        @property keyPrefix
+        @property key
         @type String
-        @default 'ember_simple_auth:'
+        @default 'ember_simple_auth:session'
       */
-      keyPrefix: 'ember_simple_auth:',
-
-      /**
-        @property _triggerChangeEventTimeout
-        @private
-      */
-      _triggerChangeEventTimeout: null,
+      key: 'ember_simple_auth:session',
 
       /**
         @method init
@@ -1398,10 +1400,8 @@ define("simple-auth/stores/local-storage",
         @param {Object} data The data to persist
       */
       persist: function(data) {
-        for (var property in data) {
-          var key = this.buildStorageKey(property);
-          localStorage.setItem(key, data[property]);
-        }
+        data = JSON.stringify(data || {});
+        localStorage.setItem(this.key, data);
         this._lastData = this.restore();
       },
 
@@ -1413,13 +1413,8 @@ define("simple-auth/stores/local-storage",
         @return {Object} All data currently persisted in the `localStorage`
       */
       restore: function() {
-        var _this = this;
-        var data = {};
-        this.knownKeys().forEach(function(key) {
-          var originalKey = key.replace(_this.keyPrefix, '');
-          data[originalKey] = localStorage.getItem(key);
-        });
-        return data;
+        var data = localStorage.getItem(this.key);
+        return JSON.parse(data) || {};
       },
 
       /**
@@ -1429,33 +1424,8 @@ define("simple-auth/stores/local-storage",
         @method clear
       */
       clear: function() {
-        this.knownKeys().forEach(function(key) {
-          localStorage.removeItem(key);
-        });
+        localStorage.removeItem(this.key);
         this._lastData = null;
-      },
-
-      /**
-        @method buildStorageKey
-        @private
-      */
-      buildStorageKey: function(property) {
-        return this.keyPrefix + property;
-      },
-
-      /**
-        @method knownKeys
-        @private
-      */
-      knownKeys: function(callback) {
-        var keys = Ember.A([]);
-        for (var i = 0, l = localStorage.length; i < l; i++) {
-          var key = localStorage.key(i);
-          if (key.indexOf(this.keyPrefix) === 0) {
-            keys.push(key);
-          }
-        }
-        return keys;
       },
 
       /**
@@ -1468,37 +1438,38 @@ define("simple-auth/stores/local-storage",
           var data = _this.restore();
           if (!flatObjectsAreEqual(data, _this._lastData)) {
             _this._lastData = data;
-            Ember.run.cancel(_this._triggerChangeEventTimeout);
-            _this._triggerChangeEventTimeout = Ember.run.next(_this, function() {
-              this.trigger('sessionDataUpdated', data);
-            });
+            _this.trigger('sessionDataUpdated', data);
           }
         });
       }
     });
   });
 define("simple-auth/test-helpers/authenticate-session", 
-  ["exports"],
-  function(__exports__) {
+  ["../configuration","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     var global = (typeof window !== 'undefined') ? window : {},
         Ember = global.Ember;
 
+    var Configuration = __dependency1__["default"];
+
     __exports__["default"] = Ember.Test.registerAsyncHelper('authenticateSession', function(app) {
-      var session = app.__container__.lookup('simple-auth-session:main');
+      var session = app.__container__.lookup(Configuration.session);
       session.authenticate('simple-auth-authenticator:test');
       return wait();
     });
   });
 define("simple-auth/test-helpers/invalidate-session", 
-  ["exports"],
-  function(__exports__) {
+  ["../configuration","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     var global = (typeof window !== 'undefined') ? window : {},
         Ember = global.Ember;
 
+    var Configuration = __dependency1__["default"];
+
     __exports__["default"] = Ember.Test.registerAsyncHelper('invalidateSession', function(app) {
-      var session = app.__container__.lookup('simple-auth-session:main');
+      var session = app.__container__.lookup(Configuration.session);
       if (session.get('isAuthenticated')) {
         session.invalidate();
       }
