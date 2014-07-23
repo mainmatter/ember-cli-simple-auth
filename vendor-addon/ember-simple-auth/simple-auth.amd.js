@@ -1,10 +1,17 @@
+(function(global) {
+  var define = global.define;
+  var require = global.require;
+  var Ember = global.Ember;
+  if (typeof Ember === 'undefined' && typeof require !== 'undefined') {
+    Ember = require('ember');
+  }
+
+Ember.libraries.register('Ember Simple Auth', '0.6.3');
+
 define("simple-auth/authenticators/base", 
   ["exports"],
   function(__exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     /**
       The base for all authenticators. __This serves as a starting point for
       implementing custom authenticators and must not be used directly.__
@@ -152,33 +159,10 @@ define("simple-auth/authenticators/base",
       }
     });
   });
-define("simple-auth/authenticators/test", 
-  ["./base","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Base = __dependency1__["default"];
-
-    __exports__["default"] = Base.extend({
-      restore: function(data) {
-        return new Ember.RSVP.resolve();
-      },
-
-      authenticate: function(options) {
-        return new Ember.RSVP.resolve();
-      },
-
-      invalidate: function(data) {
-        return new Ember.RSVP.resolve();
-      }
-    });
-  });
 define("simple-auth/authorizers/base", 
   ["exports"],
   function(__exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     /**
       The base for all authorizers. __This serves as a starting point for
       implementing custom authorizers and must not be used directly.__
@@ -365,9 +349,6 @@ define("simple-auth/ember",
   ["./initializer"],
   function(__dependency1__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var initializer = __dependency1__["default"];
 
     Ember.onLoad('Ember.Application', function(Application) {
@@ -378,9 +359,6 @@ define("simple-auth/initializer",
   ["./setup","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var setup = __dependency1__["default"];
 
     __exports__["default"] = {
@@ -394,9 +372,6 @@ define("simple-auth/mixins/application-route-mixin",
   ["./../configuration","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember  = global.Ember;
-
     var Configuration = __dependency1__["default"];
 
     /**
@@ -612,9 +587,6 @@ define("simple-auth/mixins/authenticated-route-mixin",
   ["./../configuration","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var Configuration = __dependency1__["default"];
 
     /**
@@ -670,9 +642,6 @@ define("simple-auth/mixins/authentication-controller-mixin",
   ["./../configuration","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var Configuration = __dependency1__["default"];
 
     /**
@@ -721,9 +690,6 @@ define("simple-auth/mixins/login-controller-mixin",
   ["./../configuration","./authentication-controller-mixin","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var Configuration = __dependency1__["default"];
     var AuthenticationControllerMixin = __dependency2__["default"];
 
@@ -782,9 +748,6 @@ define("simple-auth/session",
   ["exports"],
   function(__exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     /**
       __The session provides access to the current authentication state as well as
       any data the authenticator resolved with__ (see
@@ -1118,14 +1081,13 @@ define("simple-auth/session",
     });
   });
 define("simple-auth/setup", 
-  ["./configuration","./session","./stores/local-storage","./stores/ephemeral","simple-auth/authenticators/test","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
+  ["./configuration","./session","./stores/local-storage","./stores/ephemeral","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
     var Configuration = __dependency1__["default"];
     var Session = __dependency2__["default"];
     var LocalStorage = __dependency3__["default"];
     var Ephemeral = __dependency4__["default"];
-    var TestAuthenticator = __dependency5__["default"];
 
     function extractLocationOrigin(location) {
       if (Ember.typeOf(location) === 'string') {
@@ -1159,9 +1121,6 @@ define("simple-auth/setup",
       container.register('simple-auth-session-store:local-storage', LocalStorage);
       container.register('simple-auth-session-store:ephemeral', Ephemeral);
       container.register('simple-auth-session:main', Session);
-      if (Ember.testing) {
-        container.register('simple-auth-authenticator:test', TestAuthenticator);
-      }
     }
 
     /**
@@ -1213,9 +1172,6 @@ define("simple-auth/stores/base",
   ["../utils/flat-objects-are-equal","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var flatObjectsAreEqual = __dependency1__["default"];
 
     /**
@@ -1292,9 +1248,6 @@ define("simple-auth/stores/ephemeral",
   ["./base","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var Base = __dependency1__["default"];
 
     /**
@@ -1356,9 +1309,6 @@ define("simple-auth/stores/local-storage",
   ["./base","../utils/flat-objects-are-equal","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
     var Base = __dependency1__["default"];
     var flatObjectsAreEqual = __dependency2__["default"];
 
@@ -1444,38 +1394,6 @@ define("simple-auth/stores/local-storage",
       }
     });
   });
-define("simple-auth/test-helpers/authenticate-session", 
-  ["../configuration","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
-    var Configuration = __dependency1__["default"];
-
-    __exports__["default"] = Ember.Test.registerAsyncHelper('authenticateSession', function(app) {
-      var session = app.__container__.lookup(Configuration.session);
-      session.authenticate('simple-auth-authenticator:test');
-      return wait();
-    });
-  });
-define("simple-auth/test-helpers/invalidate-session", 
-  ["../configuration","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var global = (typeof window !== 'undefined') ? window : {},
-        Ember = global.Ember;
-
-    var Configuration = __dependency1__["default"];
-
-    __exports__["default"] = Ember.Test.registerAsyncHelper('invalidateSession', function(app) {
-      var session = app.__container__.lookup(Configuration.session);
-      if (session.get('isAuthenticated')) {
-        session.invalidate();
-      }
-      return wait();
-    });
-  });
 define("simple-auth/utils/flat-objects-are-equal", 
   ["exports"],
   function(__exports__) {
@@ -1528,3 +1446,4 @@ define("simple-auth/utils/is-secure-url",
       return link.protocol == 'https:';
     }
   });
+})((typeof global !== 'undefined') ? global : window);
