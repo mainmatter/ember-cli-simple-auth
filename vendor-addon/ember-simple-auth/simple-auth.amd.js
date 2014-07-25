@@ -6,7 +6,7 @@
     Ember = require('ember');
   }
 
-Ember.libraries.register('Ember Simple Auth', '0.6.3');
+Ember.libraries.register('Ember Simple Auth', '0.6.4');
 
 define("simple-auth/authenticators/base", 
   ["exports"],
@@ -983,6 +983,7 @@ define("simple-auth/session",
         @private
       */
       setup: function(authenticator, content, trigger) {
+        content = Ember.merge(Ember.merge({}, this.content), content);
         trigger = !!trigger && !this.get('isAuthenticated');
         this.beginPropertyChanges();
         this.setProperties({
@@ -1034,7 +1035,7 @@ define("simple-auth/session",
       updateStore: function() {
         var data = this.content;
         if (!Ember.isEmpty(this.authenticator)) {
-          data = Ember.$.extend({ authenticator: this.authenticator }, data);
+          data = Ember.merge({ authenticator: this.authenticator }, data);
         }
         if (!Ember.isEmpty(data)) {
           this.store.persist(data);
