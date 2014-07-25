@@ -13,7 +13,7 @@
   ],
   "files": [
     "app-addon/**",
-    "vendor-addon/**",
+      "vendor-addon/ember-simple-auth/simple-auth.amd.js",
     "index.js"
   ],
   "repository": {
