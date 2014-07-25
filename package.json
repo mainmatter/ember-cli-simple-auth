@@ -12,6 +12,7 @@
     "ember-addon"
   ],
   "files": [
+    "app-addon/**",
     "vendor-addon/**",
     "index.js"
   ],
