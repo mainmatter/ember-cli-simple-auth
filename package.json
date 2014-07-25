@@ -11,6 +11,10 @@
   "keywords": [
     "ember-addon"
   ],
+  "files": [
+    "vendor-addon/**",
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/simplabs/ember-cli-simple-auth"
