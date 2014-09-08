@@ -6,7 +6,7 @@ module.exports = {
 
     var exports = ;
 
-    this.app.import('vendor/ember-simple-auth/simple-auth.amd.js', {
+    this.app.import('bower_components/ember-simple-auth/simple-auth.amd.js', {
       exports: {
         'simple-auth/authenticators/base':                    ['default'],
         'simple-auth/authorizers/base':                       ['default'],
