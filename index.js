@@ -1,23 +1,29 @@
 module.exports = {
-  name: 'ember-cli-simple-auth',
+  name: 'Ember CLI Simple Auth',
+
+  blueprintsPath: function() {
+    return path.join(__dirname, 'blueprints');
+  },
 
   included: function(app) {
     this._super.included(app);
 
-    this.app.import('bower_components/ember-simple-auth/simple-auth.amd.js', {
+    this.app.import(app.bowerDirectory + '/ember-simple-auth/simple-auth.amd.js', {
       exports: {
-        'simple-auth/authenticators/base':                    ['default'],
-        'simple-auth/authorizers/base':                       ['default'],
-        'simple-auth/mixins/application-route-mixin':         ['default'],
-        'simple-auth/mixins/authenticated-route-mixin':       ['default'],
-        'simple-auth/mixins/authentication-controller-mixin': ['default'],
-        'simple-auth/mixins/login-controller-mixin':          ['default'],
-        'simple-auth/stores/base':                            ['default'],
-        'simple-auth/stores/ephemeral':                       ['default'],
-        'simple-auth/stores/local-storage':                   ['default'],
-        'simple-auth/session':                                ['default'],
-        'simple-auth/configuration':                          ['default'],
-        'simple-auth/initializer':                            ['default'],
+        'simple-auth': [
+          'authenticators/base',
+          'authorizers/base',
+          'mixins/application-route-mixin',
+          'mixins/authenticated-route-mixin',
+          'mixins/authentication-controller-mixin',
+          'mixins/login-controller-mixin',
+          'stores/base',
+          'stores/ephemeral',
+          'stores/local-storage',
+          'session',
+          'configuration',
+          'initializer'
+        ]
       }
     });
   }
