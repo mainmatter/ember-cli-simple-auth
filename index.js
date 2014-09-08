@@ -43,7 +43,7 @@ EmberCLISimpleAuth.prototype.included = function included(app) {
     exports['simple-auth/test-helpers/invalidate-session']   = ['default'];
   }
 
-  this.app.import('vendor/ember-simple-auth/simple-auth.amd.js', {
+  this.app.import('bower_components/ember-simple-auth/simple-auth.amd.js', {
     exports: exports
   });
 };
