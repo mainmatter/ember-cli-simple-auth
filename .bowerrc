@@ -1,3 +1,4 @@
 {
-  "directory": "vendor-addon"
+  "directory": "bower_components",
+  "analytics": false
 }
