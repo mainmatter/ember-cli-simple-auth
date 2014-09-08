@@ -9,9 +9,11 @@ To install simply run
 
 ```
 npm install --save-dev ember-cli-simple-auth
+ember generate ember-cli-simple-auth
 ```
 
-in your Ember CLI project's root.
+in your Ember CLI project's root. **Note that you must be running Ember CLI >=
+0.0.42.**
 
 **Ember CLI now uses `window.[AppName]ENV` for environment configuration
 variables. Ember Simple Auth relies on `window.ENV` to read its configuration
