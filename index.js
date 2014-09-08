@@ -1,10 +1,6 @@
 module.exports = {
   name: 'Ember CLI Simple Auth',
 
-  blueprintsPath: function() {
-    return path.join(__dirname, 'blueprints');
-  },
-
   included: function(app) {
     this._super.included(app);
 
