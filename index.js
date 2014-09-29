@@ -1,5 +1,25 @@
+var path = require('path');
+
 module.exports = {
   name: 'Ember CLI Simple Auth',
+
+  treeFor: function treeFor(name) {
+    var tree     = this._super.included(app);
+    this.replace = this.replace || require('broccoli-string-replace');
+
+    if (name === 'vendor') {
+      var config = this.project.config(this.app.env);
+      tree = this.replace(tree, {
+        files: ['torii/torii.amd.js'],
+        patterns: [{
+          match: /Ember\.get\(global, 'ENV\.' \+ scope)/,
+          replacement: 'require("' + this.app.name + '/config/environment")["default"]["simple-auth"]'
+        }]
+      });
+    }
+
+    return tree;
+  },
 
   included: function(app) {
     this._super.included(app);
