@@ -23,7 +23,7 @@ Ember Simple Auth uses the Ember CLI project's configuration as defined in
 
 ```js
 ENV['simple-auth] = {
-  …
+  serverTokenRevocationEndpoint: '/revoke'
 };
 ```
 
