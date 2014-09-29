@@ -4,12 +4,12 @@ module.exports = {
   name: 'Ember CLI Simple Auth',
 
   treeFor: function treeFor(name) {
-    var tree     = this._super.treeFor(this.app);
-    this.replace = this.replace || require('broccoli-string-replace');
+    var tree = this._super.apply(arguments);
 
     if (name === 'vendor') {
-      var config = this.project.config(this.app.env);
-      tree = this.replace(tree, {
+      this.replace = this.replace || require('broccoli-string-replace');
+      var config   = this.project.config(this.app.env);
+      tree         = this.replace(tree, {
         files: [this.app.bowerDirectory + '/ember-simple-auth/simple-auth.amd.js'],
         patterns: [{
           match: /Ember\.get\(global, 'ENV\.' \+ scope)/,
@@ -22,7 +22,7 @@ module.exports = {
   },
 
   included: function(app) {
-    this._super.included(app);
+    this._super.apply(arguments);
 
     this.app.import(app.bowerDirectory + '/ember-simple-auth/simple-auth.amd.js', {
       exports: {
