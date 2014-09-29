@@ -1,3 +1,11 @@
-import initializer from 'simple-auth/initializer';
+import Configuration from 'simple-auth/configuration';
+import setup from 'simple-auth/setup';
+import ENV from '../config/environment';`
 
-export default initializer;
+export default {
+  name:       'simple-auth',
+  initialize: function(container, application) {
+    Configuration.load(container, ENV);
+    setup(container, application);
+  }
+};
