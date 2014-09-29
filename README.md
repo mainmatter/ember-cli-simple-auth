@@ -5,7 +5,7 @@ packaged as an [Ember CLI](https://github.com/stefanpenner/ember-cli) Addon.
 
 ## Installation
 
-**Ember Simple Auth OAuth 2.0 requires at least Ember CLI 0.0.44.**
+**Ember Simple Auth requires at least Ember CLI 0.0.44.**
 
 To install simply run
 
@@ -16,15 +16,15 @@ ember generate ember-cli-simple-auth
 
 in your Ember CLI project's root.
 
-**Ember CLI now uses `window.[AppName]ENV` for environment configuration
-variables. Ember Simple Auth relies on `window.ENV` to read its configuration
-from though, so you'll also need to add this line to your `app/index.html`
-file:**
+### Configuration
 
-```diff
-  window.MyAppENV = {{ENV}};
-+ window.ENV = window.MyAppENV;
-  window.EmberENV = window.MyAppENV.EmberENV;
+Ember Simple Auth uses the Ember CLI project's configuration as defined in
+`config/environment.js`. Configure values for `ENV['simple-auth']`, e.g.:
+
+```js
+ENV['simple-auth] = {
+  …
+};
 ```
 
 For the actual Ember Simple Auth repository see
