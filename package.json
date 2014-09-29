@@ -18,8 +18,5 @@
     "type": "git",
     "url": "git://github.com/simplabs/ember-cli-simple-auth"
   },
-  "dependencies": {
-    "broccoli-string-replace": "^0.0.2"
-  },
   "homepage": "https://github.com/simplabs/ember-cli-simple-auth"
 }
