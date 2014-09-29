@@ -10,7 +10,7 @@ module.exports = {
     if (name === 'vendor') {
       var config = this.project.config(this.app.env);
       tree = this.replace(tree, {
-        files: ['torii/torii.amd.js'],
+        files: [this.app.bowerDirectory + '/ember-simple-auth/simple-auth.amd.js'],
         patterns: [{
           match: /Ember\.get\(global, 'ENV\.' \+ scope)/,
           replacement: 'require("' + this.app.name + '/config/environment")["default"]["simple-auth"]'
