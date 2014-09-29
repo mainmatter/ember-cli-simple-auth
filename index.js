@@ -4,7 +4,7 @@ module.exports = {
   name: 'Ember CLI Simple Auth',
 
   treeFor: function treeFor(name) {
-    var tree     = this._super.included(app);
+    var tree     = this._super.treeFor(this.app);
     this.replace = this.replace || require('broccoli-string-replace');
 
     if (name === 'vendor') {
