@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
   name: 'Ember CLI Simple Auth',
 
@@ -18,7 +20,7 @@ module.exports = {
         'simple-auth/stores/local-storage':                   ['default'],
         'simple-auth/session':                                ['default'],
         'simple-auth/configuration':                          ['default'],
-        'simple-auth/initializer':                            ['default']
+        'simple-auth/setup':                                  ['default']
       }
     });
   }
