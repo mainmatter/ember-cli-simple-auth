@@ -3,6 +3,6 @@ module.exports = {
   },
 
   afterInstall: function() {
-    return this.addBowerPackageToProject('https://github.com/simplabs/ember-simple-auth.git#next');
+    return this.addBowerPackageToProject('https://github.com/simplabs/ember-simple-auth-component.git#next');
   }
 };
