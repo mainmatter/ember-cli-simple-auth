@@ -8,6 +8,10 @@ module.exports = {
 
     this.app.import(app.bowerDirectory + '/ember-simple-auth/simple-auth.amd.js', {
       exports: {
+        'simple-auth/utils/flat-objects-are-equal':           ['default'],
+        'simple-auth/utils/get-global-config':                ['default'],
+        'simple-auth/utils/is-secure-url':                    ['default'],
+        'simple-auth/utils/load-config':                      ['default'],
         'simple-auth/authenticators/base':                    ['default'],
         'simple-auth/authorizers/base':                       ['default'],
         'simple-auth/mixins/application-route-mixin':         ['default'],
