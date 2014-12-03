@@ -3,6 +3,6 @@ module.exports = {
   },
 
   afterInstall: function() {
-    return this.addBowerPackageToProject('ember-simple-auth', '0.7.1');
+    return this.addBowerPackageToProject('ember-simple-auth', '0.7.2');
   }
 };
