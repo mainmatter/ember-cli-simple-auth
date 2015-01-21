@@ -10,11 +10,17 @@ packaged as an [Ember CLI](https://github.com/stefanpenner/ember-cli) Addon.
 To install simply run
 
 ```
-npm install --save-dev ember-cli-simple-auth
-ember generate ember-cli-simple-auth
+ember install:addon ember-cli-simple-auth
 ```
 
 in your Ember CLI project's root.
+
+If you're using Ember CLI 0.1.4 or older, run
+
+```
+npm install --save-dev ember-cli-simple-auth
+ember generate ember-cli-simple-auth
+```
 
 ### Configuration
 
