@@ -41,3 +41,13 @@ ENV['simple-auth'] = {
 
 For the actual Ember Simple Auth repository see
 https://github.com/simplabs/ember-simple-auth
+
+## Usage
+
+You can use this plugin to generate custom authenticators and authorizers
+using Ember CLI like this:
+
+```
+ember generate authenticator custom
+ember generate authorizer custom
+```
