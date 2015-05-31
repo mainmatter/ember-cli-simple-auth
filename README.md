@@ -44,10 +44,11 @@ https://github.com/simplabs/ember-simple-auth
 
 ## Usage
 
-You can use this plugin to generate custom authenticators and authorizers
-using Ember CLI like this:
+You can use this plugin to generate custom authenticators, authorizers
+and session stores using Ember CLI like this:
 
 ```
 ember generate authenticator custom
 ember generate authorizer custom
+ember generate session-store custom
 ```
