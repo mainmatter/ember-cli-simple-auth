@@ -1,6 +1,6 @@
-import Authorizer from 'simple-auth/authorizers/base';
+import Base from 'simple-auth/authorizers/base';
 
-export default Authorizer.extend({
+export default Base.extend({
   authorize: function(jqXHR, requestOptions) {
   }
 });

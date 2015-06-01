@@ -1,6 +1,6 @@
-import SessionStore from 'simple-auth/stores/base';
+import Base from 'simple-auth/stores/base';
 
-export default SessionStore.extend({
+export default Base.extend({
   persist: function(data) {
   },
 

@@ -1,7 +1,7 @@
 import Ember from 'ember';
-import Authenticator from 'simple-auth/authenticators/base';
+import Base from 'simple-auth/authenticators/base';
 
-export default Authenticator.extend({
+export default Base.extend({
   restore(data) {
     return Ember.RSVP.reject();
   },
@@ -10,7 +10,7 @@ export default Authenticator.extend({
     return Ember.RSVP.reject();
   },
 
-  invalidate(session) {
+  invalidate(data) {
     return Ember.RSVP.resolve();
   }
 });
