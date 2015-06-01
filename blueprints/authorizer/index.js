@@ -1,5 +1,5 @@
 /*jshint node:true*/
 
 module.exports = {
-  description: 'Generates a simple-auth authorizer.'
+  description: 'Generates an Ember Simple Auth Authorizer.'
 };

@@ -1,5 +1,5 @@
 /*jshint node:true*/
 
 module.exports = {
-  description: 'Generates a simple-auth session.'
+  description: 'Generates an Ember Simple Auth Session.'
 };
