@@ -1,5 +1,9 @@
 #  Ember Simple Auth
 
+__This repository is deprecated. [Ember Simple Auth 1.0 is distributed as an
+Ember CLI Addon](https://github.com/simplabs/ember-simple-auth) that contains
+all of the previously individual parts of the library.__
+
 This is an npm package that contains the Ember Simple Auth base library
 packaged as an [Ember CLI](https://github.com/stefanpenner/ember-cli) Addon.
 
